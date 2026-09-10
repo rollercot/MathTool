@@ -3,21 +3,29 @@ import sys
 import math
 
 MAX_VALUE = 10000
-
+text1_str = '     mathtool - решение уравнений вида A*x^2 + B*x + C = 0\n' \
+    '\n' \
+    '     Использование\n' \
+    '\n' \
+    '     python mathtool.py                              Вывод справки\n' \
+    '     python mathtool.py --help                       Вывод справки\n' \
+    '     python mathtool.py solve                        Ввод коэффицентов с клавиатуры\n' \
+    '     python mathtool.py solve -a 1 -b -3 -c 2        Решение с заданными коэффцентами\n' \
+    '\n' \
+    'Коэффициенты A, B, C - целые числа и по модулю не превышают 10000'
 # Вывод справки
-if len(sys.argv) == 1 or sys.argv[1] == "--help":
-    print("mathtool - решение уравнений вида A*x^2 + B*x + C = 0")
-    print()
-    print("Использование")
-    print("     python mathtool.py                              Вывод справки")
-    print("     python mathtool.py --help                       Вывод справки")
-    print("     python mathtool.py solve                        Ввод коэффицентов с клавиатуры")
-    print("     python mathtool.py solve -a 1 -b -3 -c 2         Решение с заданными коэффцентами")
-    print()
-    print("Коэффициенты A, B, C - целые числа и по модулю не превышают 10000")
+if len(sys.argv) == 1:
+    print(text1_str)
     sys.exit(0)
 
-# Проверка аргумента
+if sys.argv[1] == "--help":
+    if len(sys.argv) == 2:
+        print(text1_str)
+        sys.exit(0)
+    else:
+        print("Ошибка: неверный набор параметров", file=sys.stderr)
+        sys.exit(1)
+
 if sys.argv[1] != "solve":
     print("Ошибка: неизвестная команда", file=sys.stderr)
     sys.exit(1)
@@ -54,35 +62,12 @@ if abs(a) > MAX_VALUE or abs(b) > MAX_VALUE or abs(c) > MAX_VALUE:
     print("Ошибка: значение вне диапaзона", file=sys.stderr)
     sys.exit(1)
 
-"""
-если A = 0:
-    если B ≠ 0:
-        вывести "Уравнение линейное"
-        x = -C / B
-        вывести x с тремя знаками
-    иначе:
-        ошибка "это не уравнение"
-        выход с кодом 1
-иначе:
-    вывести "Уравнение квадратное"
-    D = B*B - 4*A*C
-    вывести D
-    если D > 0:
-        x1 = (-B + sqrt(D)) / (2*A)
-        x2 = (-B - sqrt(D)) / (2*A)
-        вывести x1 и x2
-    иначе если D = 0:
-        x = -B / (2*A)
-        вывести x
-    иначе:
-        вывести "Действительных корней нет"
-"""
 # Математический блок 
 if a == 0:
     if b != 0:
         print("Уравнение линейное")
         x = -c / b
-        print (f"x = {x:.3f}")
+        print (f"x = {int(x)}")
     else:
         print("Ошибка: это не уравнение", file=sys.stderr)
         sys.exit(1)
@@ -97,6 +82,6 @@ else:
         print(f"x2 = {x2:.3f}")
     elif D == 0:
         x = -b / (2*a)
-        print(f"x = {x:.3f}")
+        print(f"x = {x}")
     else:
         print("Действительных корней нет")
