@@ -1,6 +1,6 @@
 # Импорт библиотек (sys читать ком. строку math считать)
 import sys
-import math
+from calc import equation
 
 MAX_VALUE = 10000
 text1_str = '     mathtool - решение уравнений вида A*x^2 + B*x + C = 0\n' \
@@ -57,31 +57,28 @@ try:
 except ValueError:
     print("Ошибка: коэффициент не является целым числом", file= sys.stderr)
     sys.exit(1)
-# Проверка чтобы числа были в диапозоне 10000
-if abs(a) > MAX_VALUE or abs(b) > MAX_VALUE or abs(c) > MAX_VALUE:
-    print("Ошибка: значение вне диапазона", file=sys.stderr)
+
+#проверка диапазона и решение через модуль 
+try:
+    equation.check_coefficients({"A": a, "B": b, "C": c})
+    kind, d, roots = equation.solve()
+except ValueError as error:
+    print(f"Ошибка: {error}", file=sys.stderr)
     sys.exit(1)
 
-# Математический блок 
-if a == 0:
-    if b != 0:
-        print("Уравнение линейное")
-        x = -c / b
-        print (f"x = {x:.3f}")
-    else:
-        print("Ошибка: это не уравнение", file=sys.stderr)
-        sys.exit(1)
+#Вывод результата
+if kind == "линейное":
+    print("Уравнение линейное")
 else:
     print("Уравнение квадратное")
-    D = b * b - 4 * a * c
-    print(f"D = {D}")
-    if D > 0:
-        x1 = (-b + math.sqrt(D)) / (2*a)
-        x2 = (-b - math.sqrt(D)) / (2*a)
-        print(f"x1 = {x1:.3f}")
-        print(f"x2 = {x2:.3f}")
-    elif D == 0:
-        x = -b / (2*a)
-        print(f"x = {x:.3f}")
-    else:
-        print("Действительных корней нет")
+
+if d is not None:
+    print(f"D = {d}")
+
+if not roots:
+    print("Действительных корней нет")
+elif len(roots) == 1:
+    print(f"x = {roots[0]:.3f}")
+else:
+    print(f"x1 = {roots[0]:.3f}")
+    print(f"x2 = {roots[1]:.3f}")
