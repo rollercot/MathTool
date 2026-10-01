@@ -9,8 +9,8 @@ text1_str = '     mathtool - решение уравнений вида A*x^2 + 
     '\n' \
     '     python mathtool.py                              Вывод справки\n' \
     '     python mathtool.py --help                       Вывод справки\n' \
-    '     python mathtool.py solve                        Ввод коэффицентов с клавиатуры\n' \
-    '     python mathtool.py solve -a 1 -b -3 -c 2        Решение с заданными коэффцентами\n' \
+    '     python mathtool.py solve                        Ввод коэффициентов с клавиатуры\n' \
+    '     python mathtool.py solve -a 1 -b -3 -c 2        Решение с заданными коэффциентами\n' \
     '\n' \
     'Коэффициенты A, B, C - целые числа и по модулю не превышают 10000'
 # Вывод справки
@@ -59,7 +59,7 @@ except ValueError:
     sys.exit(1)
 # Проверка чтобы числа были в диапозоне 10000
 if abs(a) > MAX_VALUE or abs(b) > MAX_VALUE or abs(c) > MAX_VALUE:
-    print("Ошибка: значение вне диапaзона", file=sys.stderr)
+    print("Ошибка: значение вне диапазона", file=sys.stderr)
     sys.exit(1)
 
 # Математический блок 
@@ -67,7 +67,7 @@ if a == 0:
     if b != 0:
         print("Уравнение линейное")
         x = -c / b
-        print (f"x = {int(x)}")
+        print (f"x = {x:.3f}")
     else:
         print("Ошибка: это не уравнение", file=sys.stderr)
         sys.exit(1)
@@ -82,6 +82,6 @@ else:
         print(f"x2 = {x2:.3f}")
     elif D == 0:
         x = -b / (2*a)
-        print(f"x = {x}")
+        print(f"x = {x:.3f}")
     else:
         print("Действительных корней нет")
