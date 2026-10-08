@@ -1,6 +1,7 @@
 import sys
 import cli
 from Calc import equation
+from Calc import stats
 
 
 #Обработка команды solve
@@ -44,10 +45,34 @@ def handle_solve(args):
     return 0
 
 
-#Заглушка
+# Stats
 def handle_stats(args):
-    print("stats: команда ещё не реализована", file=sys.stderr)
-    return 1
+    # Выбор источника: файл или стандартный ввод
+    if args.input is not None:
+        source = open(args.input, encoding="utf-8-sig")
+    else:
+        source = sys.stdin
+
+    # Чтение чисел
+    values = []
+    try:
+        for line in source:
+            for word in line.split():
+                try:
+                    values.append(float(word))
+                except ValueError:
+                    raise ValueError(f"{word} не является числом")
+    finally:
+        if args.input is not None:
+            source.close()
+
+    # Проверки — в модуле
+    stats.check_values(values)
+
+    print(f"Прочитано чисел: {len(values)}")
+    print(f"Значения: {values}")
+
+    return 0
 
 
 #Заглушка
