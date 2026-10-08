@@ -1,10 +1,10 @@
 import sys
 import math
 import cli
-from Calc import equation
-from Calc import stats
-from Calc import series
-from Calc import integration
+from calc import equation
+from calc import stats
+from calc import series
+from calc import integration
 
 
 #Обработка команды solve

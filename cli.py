@@ -1,5 +1,5 @@
-from Calc import series
-from Calc import integration
+from calc import series
+from calc import integration
 import argparse
 
 
