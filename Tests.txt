@@ -67,5 +67,23 @@
 
 16. python mathtool.py solve
     Ввод: 1, -3, 2
-    Ожидается : Уравнение квадратное, D = 1, x1 = 2.000, x2 = 1.000, код возврата 0
-    
+    Ожидается : Уравнение квадратное, D = 1, x1 = 2.000, x2 = 1.000, код возврата 0    
+Разбор параметров (argparse)
+
+17. python mathtool.py solve -x 1 -b -3 -c 2
+    Ожидается : (Ошибка argparse: unrecognized arguments), код возврата 2
+18. python mathtool.py solve -a
+    Ожидается : (Ошибка argparse: expected one argument), код возврата 2
+19. python mathtool.py solve -a abc -b 1 -c 1
+    Ожидается : (Ошибка argparse: invalid int value), код возврата 2
+20. python mathtool.py badcmd
+    Ожидается : (Ошибка argparse: invalid choice), код возврата 2
+21. python mathtool.py solve -a 1 -b 2
+    Ожидается : (Ошибка: укажите все три коэффициента либо ни одного), код возврата 1
+
+     Справка (новые)
+
+22. python mathtool.py solve --help
+    Ожидается : справка по команде solve, код возврата 0
+23. python mathtool.py stats --help
+    Ожидается : справка по команде stats, код возврата 0

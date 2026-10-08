@@ -1,85 +1,90 @@
-# Импорт библиотек (sys читать ком. строку math считать)
 import sys
+import cli
 from Calc import equation
 
-MAX_VALUE = 10000
-text1_str = '     mathtool - решение уравнений вида A*x^2 + B*x + C = 0\n' \
-    '\n' \
-    '     Использование\n' \
-    '\n' \
-    '     python mathtool.py                              Вывод справки\n' \
-    '     python mathtool.py --help                       Вывод справки\n' \
-    '     python mathtool.py solve                        Ввод коэффициентов с клавиатуры\n' \
-    '     python mathtool.py solve -a 1 -b -3 -c 2        Решение с заданными коэффциентами\n' \
-    '\n' \
-    'Коэффициенты A, B, C - целые числа и по модулю не превышают 10000'
-# Вывод справки
-if len(sys.argv) == 1:
-    print(text1_str)
-    sys.exit(0)
 
-if sys.argv[1] == "--help":
-    if len(sys.argv) == 2:
-        print(text1_str)
-        sys.exit(0)
+#Обработка команды solve
+def handle_solve(args):
+    if args.a is None and args.b is None and args.c is None:
+        # Ни одного параметра — ввод с клавиатуры
+        try:
+            a = int(input("Введите A: "))
+            b = int(input("Введите B: "))
+            c = int(input("Введите C: "))
+        except ValueError:
+            raise ValueError("коэффициент не является целым числом")
+    elif args.a is not None and args.b is not None and args.c is not None:
+        # Все три параметра заданы — берём из args
+        a, b, c = args.a, args.b, args.c
     else:
-        print("Ошибка: неверный набор параметров", file=sys.stderr)
-        sys.exit(1)
+        # Задана только часть — ошибка
+        raise ValueError("укажите все три коэффициента либо ни одного")
 
-if sys.argv[1] != "solve":
-    print("Ошибка: неизвестная команда", file=sys.stderr)
-    sys.exit(1)
-
-# Получение данных от пользователя
-if len(sys.argv) == 2:
-    # Если прийдет mathtool solve
-    a_str =input("Введите A:")
-    b_str =input("Введите B:")
-    c_str =input("Введите C:")
-
-elif len(sys.argv) ==8:
-    # Если прийдет mathtool solve -a 1 -b -3 -c 2
-    if sys.argv[2] != "-a" or sys.argv[4] != "-b" or sys.argv[6] != "-c":
-       print("Ошибка: неизвестный параметр", file=sys.stderr)
-       sys.exit(1)
-    a_str = sys.argv[3]
-    b_str = sys.argv[5]
-    c_str = sys.argv[7]
-else:
-    print("Ошибка: неверный набор параметров", file=sys.stderr)
-    sys.exit(1)
-
-# Перевод строки в число
-try:
-    a = int(a_str)
-    b = int(b_str)
-    c = int(c_str)
-except ValueError:
-    print("Ошибка: коэффициент не является целым числом", file= sys.stderr)
-    sys.exit(1)
-
-#проверка диапазона и решение через модуль 
-try:
+    # Проверка диапазона и решение
     equation.check_coefficients({"A": a, "B": b, "C": c})
-    kind, d, roots = equation.solve(a,b,c)
-except ValueError as error:
-    print(f"Ошибка: {error}",file=sys.stderr)
-    sys.exit(1)
+    kind, d, roots = equation.solve(a, b, c)
+
+    # Вывод результата
+    if kind == "линейное":
+        print("Уравнение линейное")
+    else:
+        print("Уравнение квадратное")
+
+    if d is not None:
+        print(f"D = {d}")
+
+    if not roots:
+        print("Действительных корней нет")
+    elif len(roots) == 1:
+        print(f"x = {roots[0]:.3f}")
+    else:
+        print(f"x1 = {roots[0]:.3f}")
+        print(f"x2 = {roots[1]:.3f}")
+
+    return 0
 
 
-# Вывод результата
-if kind == "линейное":
-    print("Уравнение линейное")
-else:
-    print("Уравнение квадратное")
+#Заглушка
+def handle_stats(args):
+    print("stats: команда ещё не реализована", file=sys.stderr)
+    return 1
 
-if d is not None:
-    print(f"D = {d}")
 
-if not roots:
-    print("Действительных корней нет")
-elif len(roots) == 1:
-    print(f"x = {roots[0]:.3f}")
-else:
-    print(f"x1 = {roots[0]:.3f}")
-    print(f"x2 = {roots[1]:.3f}")
+#Заглушка
+def handle_series(args):
+    print("series: команда ещё не реализована", file=sys.stderr)
+    return 1
+
+
+#Заглушка
+def handle_integrate(args):
+    print("integrate: команда ещё не реализована", file=sys.stderr)
+    return 1
+
+
+HANDLERS = {
+    "solve": handle_solve,
+    "stats": handle_stats,
+    "series": handle_series,
+    "integrate": handle_integrate,
+}
+
+
+#Разбор параметров и выбор обработчика
+def main(argv):
+    parser = cli.build_parser()
+    args = parser.parse_args(argv)
+
+    if args.command is None:
+        parser.print_help()
+        return 0
+
+    try:
+        return HANDLERS[args.command](args)
+    except (ValueError, OSError) as error:
+        print(f"ОШИБКА: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
