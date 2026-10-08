@@ -1,6 +1,6 @@
 # Импорт библиотек (sys читать ком. строку math считать)
 import sys
-from calc import equation
+from Calc import equation
 
 MAX_VALUE = 10000
 text1_str = '     mathtool - решение уравнений вида A*x^2 + B*x + C = 0\n' \
@@ -61,12 +61,13 @@ except ValueError:
 #проверка диапазона и решение через модуль 
 try:
     equation.check_coefficients({"A": a, "B": b, "C": c})
-    kind, d, roots = equation.solve()
+    kind, d, roots = equation.solve(a,b,c)
 except ValueError as error:
-    print(f"Ошибка: {error}", file=sys.stderr)
+    print(f"Ошибка: {error}",file=sys.stderr)
     sys.exit(1)
 
-#Вывод результата
+
+# Вывод результата
 if kind == "линейное":
     print("Уравнение линейное")
 else:
