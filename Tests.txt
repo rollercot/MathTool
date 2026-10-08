@@ -112,3 +112,33 @@
     Ожидается : Положительных 2, Отрицательных 2, код возврата 0
 35. "1 3" | python mathtool.py stats
     Ожидается : Станд. откл.: 1.414, код возврата 0
+     series: сумма ряда
+36. python mathtool.py series --func sqplus --terms 6
+    Ожидается : S = 1/(1^2+1) - 1/(2^2+1) + 1/(3^2+1) - ...
+                Слагаемых: 6
+                Сумма ряда: 0.3526
+                код возврата 0
+37. python mathtool.py series --func sqplus --eps 0.0001
+    Ожидается : Слагаемых: 100, Сумма ряда: 0.3639, код 0
+38. python mathtool.py series --func third --eps 0.0001
+    Ожидается : Слагаемых: 3334, Сумма ряда: 0.2310, код 0
+39. python mathtool.py series --func sqplus --terms 1
+    Ожидается : Слагаемых: 1, Сумма ряда: 0.5000, код 0
+40. python mathtool.py series --func sqplus --terms 10000
+    Ожидается : Слагаемых: 10000, Сумма ряда: 0.3640, код 0
+41. python mathtool.py series --func sqplus --terms 0
+    Ожидается : (Ошибка: количество слагаемых вне диапазона), код 1
+42. python mathtool.py series --func sqplus --terms 10001
+    Ожидается : (Ошибка: количество слагаемых вне диапазона), код 1
+43. python mathtool.py series --func sqplus --eps 0.001
+    Ожидается : (Ошибка: точность вне диапазона), код 1
+44. python mathtool.py series --func sqplus --eps 0
+    Ожидается : (Ошибка: точность вне диапазона), код 1
+45. python mathtool.py series --func third --eps 0.000001
+    Ожидается : (Ошибка: точность не достигнута), код 1
+46. python mathtool.py series --func sqplus --terms 6 --eps 0.0001
+    Ожидается : (Ошибка argparse: not allowed with), код 2
+47. python mathtool.py series --func sqplus
+    Ожидается : (Ошибка argparse: one of the arguments is required), код 2
+48. python mathtool.py series --func nosuch --terms 6
+    Ожидается : (Ошибка argparse: invalid choice), код 2

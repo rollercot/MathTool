@@ -1,7 +1,9 @@
 import sys
+import math
 import cli
 from Calc import equation
 from Calc import stats
+from Calc import series
 
 
 #Обработка команды solve
@@ -79,11 +81,36 @@ def handle_stats(args):
     return 0
 
 
-#Заглушка
+#       Series
 def handle_series(args):
-    print("series: команда ещё не реализована", file=sys.stderr)
-    return 1
+    term, formula = series.FORMULAS[args.func]
 
+    # Проверка параметров ДО вывода формулы
+    if args.terms is not None:
+        if not (1 <= args.terms <= series.MAX_TERMS):
+            raise ValueError(
+                f"количество слагаемых вне диапазона [1, {series.MAX_TERMS}], получено {args.terms}"
+            )
+
+    if args.eps is not None:
+        if not (math.isfinite(args.eps) and 0 < args.eps <= series.MAX_EPS):
+            raise ValueError(
+                f"точность вне диапазона (0, {series.MAX_EPS}], получено {args.eps}"
+            )
+
+    # Вычисление
+    if args.terms is not None:
+        result = series.sum_by_terms(term, args.terms)
+        n = args.terms
+    elif args.eps is not None:
+        result, n = series.sum_by_eps(term, args.eps)
+    else:
+        raise ValueError("Нужно указать либо --terms, либо --eps")
+
+    # Вывод
+    print(formula)
+    print(f"Слагаемых: {n}")
+    print(f"Сумма ряда: {result:.4f}")
 
 #Заглушка
 def handle_integrate(args):

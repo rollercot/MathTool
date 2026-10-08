@@ -1,3 +1,4 @@
+from Calc import series
 import argparse
 
 
@@ -22,7 +23,7 @@ def build_parser():
 
     #               series
     p = sub.add_parser("series", help="Сумма ряда", allow_abbrev=False)
-    p.add_argument("--func", type=str, required=True, help="Имя ряда")
+    p.add_argument("--func", type=str, required=True,choices=sorted(series.FORMULAS),help="Имя ряда")
     group = p.add_mutually_exclusive_group(required=True)
     group.add_argument("--terms", type=int, help="Количество слагаемых")
     group.add_argument("--eps", type=float, help="Точность")
