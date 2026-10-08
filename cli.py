@@ -1,4 +1,5 @@
 from Calc import series
+from Calc import integration
 import argparse
 
 
@@ -30,7 +31,7 @@ def build_parser():
 
     #               inregrate
     p = sub.add_parser("integrate", help="Численное интегрирование", allow_abbrev=False)
-    p.add_argument("--func", type=str, required=True, help="Имя функции")
+    p.add_argument("--func", type=str, required=True,choices=sorted(integration.FUNCTIONS),help="Имя функции")
     p.add_argument("--from", dest="start", type=float, required=True, help="Нижний предел")
     p.add_argument("--to", type=float, required=True, help="Верхний предел")
     p.add_argument("--steps", type=int, required=True, help="Число шагов")

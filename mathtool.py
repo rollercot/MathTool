@@ -4,6 +4,7 @@ import cli
 from Calc import equation
 from Calc import stats
 from Calc import series
+from Calc import integration
 
 
 #Обработка команды solve
@@ -112,17 +113,42 @@ def handle_series(args):
     print(f"Слагаемых: {n}")
     print(f"Сумма ряда: {result:.4f}")
 
-#Заглушка
-def handle_integrate(args):
-    print("integrate: команда ещё не реализована", file=sys.stderr)
-    return 1
 
+#       Integration
+def handle_integration(args):
+    f, formula, low, high, closed = integration.FUNCTIONS[args.func]
+
+    #Проверка параметров ДО вывода формулы
+
+    if not (math.isfinite(args.start) and math.isfinite(args.to)):
+        raise ValueError("пределы интегрирования должны быть конечными")
+
+    if not (args.start < args.to):
+        raise ValueError("нижний предел должен быть меньше верхнего")
+
+    #Проверка попадания в промежуток функции без дублирования кода
+    if closed:
+        inside = low <= args.start <= high and low <= args.to <= high
+    else:
+        inside = low < args.start < high and low < args.to < high
+    if not inside:
+        raise ValueError("предел вне промежутка функции")
+
+    if not (integration.MIN_STEPS <= args.steps <= integration.MAX_STEPS):
+        raise ValueError("количество шагов вне диапазона")
+
+    #Вычислениe
+    result = integration.integrate(f, args.start, args.to, args.steps)
+
+    #Вывод
+    print(formula)
+    print(f"Значение интеграла: {result:.4f}")
 
 HANDLERS = {
     "solve": handle_solve,
     "stats": handle_stats,
     "series": handle_series,
-    "integrate": handle_integrate,
+    "integrate": handle_integration,
 }
 
 

@@ -142,3 +142,30 @@
     Ожидается : (Ошибка argparse: one of the arguments is required), код 2
 48. python mathtool.py series --func nosuch --terms 6
     Ожидается : (Ошибка argparse: invalid choice), код 2
+         integrate: численное интегрирование
+49. python mathtool.py integrate --func ratio --from 0 --to 20 --steps 10
+    Ожидается : F(x) = x / (x + 1)
+                Значение интеграла: 15.7335
+                код возврата 0
+50. python mathtool.py integrate --func ratio --from 0 --to 20 --steps 1000
+    Ожидается : Значение интеграла: 16.9459, код 0
+51. python mathtool.py integrate --func ratio --from 0 --to 20 --steps 10000
+    Ожидается : Значение интеграла: 16.9545, код 0
+52. python mathtool.py integrate --func ratio --from 5 --to 10 --steps 1000
+    Ожидается : Значение интеграла: 4.3937, код 0
+53. python mathtool.py integrate --func root --from -4.9 --to 4.9 --steps 1000
+    Ожидается : F(x) = sqrt(x^2 + 1)
+                Значение интеграла: 26.7976
+                код 0
+54. python mathtool.py integrate --func root --from -5 --to 5 --steps 100
+    Ожидается : (Ошибка: предел вне промежутка функции), код 1
+55. python mathtool.py integrate --func ratio --from 4 --to 1 --steps 100
+    Ожидается : (Ошибка: нижний предел должен быть меньше верхнего), код 1
+56. python mathtool.py integrate --func ratio --from 0 --to 20 --steps 0
+    Ожидается : (Ошибка: количество шагов вне диапазона), код 1
+57. python mathtool.py integrate --func ratio --from 0 --to 20 --steps 100001
+    Ожидается : (Ошибка: количество шагов вне диапазона), код 1
+58. python mathtool.py integrate --func ratio --from 0 --to 20
+    Ожидается : (Ошибка argparse: --steps is required), код 2
+59. python mathtool.py integrate --func nosuch --from 0 --to 20 --steps 100
+    Ожидается : (Ошибка argparse: invalid choice), код 2
