@@ -69,8 +69,12 @@ def handle_stats(args):
     # Проверки — в модуле
     stats.check_values(values)
 
-    print(f"Прочитано чисел: {len(values)}")
-    print(f"Значения: {values}")
+    for label, function, form in stats.REPORT:
+        value = function(values)
+        if value is None:
+            print(f"{label}: НЕ СУЩЕСТВУЕТ")
+        else:
+            print(f"{label}: {value:{form}}")
 
     return 0
 
