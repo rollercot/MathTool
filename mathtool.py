@@ -66,11 +66,15 @@ def handle_stats(args):
             raise
 
     else:
+        print("Напишите все числа: ")
         # со стандартного ввода - через input()
         while True:
             try:
-                line = input("Напишите все числа либо нажмите ctrl+z + Enter: ")
+                line = input()
             except EOFError:
+                break
+            # Останавиливается если пустая строка
+            if line.strip() == "":
                 break
             for word in line.split():
                 try:
