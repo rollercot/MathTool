@@ -50,26 +50,34 @@ def handle_solve(args):
 
 # Stats
 def handle_stats(args):
-    # Выбор источника: файл или стандартный ввод
-    if args.input is not None:
-        source = open(args.input, encoding="utf-8-sig")
-    else:
-        source = sys.stdin
-
-    # Чтение чисел
     values = []
-    try:
-        for line in source:
+
+    if args.input is not None:
+        # из файла - как раньше
+        try:
+            with open(args.input, encoding="utf-8-sig") as source:
+                for line in source:
+                    for word in line.split():
+                        try:
+                            values.append(float(word))
+                        except ValueError:
+                            raise ValueError(f"{word} не является числом")
+        except OSError:
+            raise
+
+    else:
+        # со стандартного ввода - через input()
+        while True:
+            try:
+                line = input("Напишите все числа либо нажмите ctrl+z + Enter: ")
+            except EOFError:
+                break
             for word in line.split():
                 try:
                     values.append(float(word))
                 except ValueError:
                     raise ValueError(f"{word} не является числом")
-    finally:
-        if args.input is not None:
-            source.close()
 
-    # Проверки — в модуле
     stats.check_values(values)
 
     for label, function, form in stats.REPORT:
@@ -80,7 +88,6 @@ def handle_stats(args):
             print(f"{label}: {value:{form}}")
 
     return 0
-
 
 #       Series
 def handle_series(args):
